@@ -3,7 +3,9 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { projectValidationSchema } from "../utils/validations";
 import { projectService } from "../services/project.service";
-import { Project } from "../types/project";
+import { Project } from "../models/ProjectProps";
+import { Input } from "../shared/ui/Input";
+import { Button } from "../shared/ui/Button";
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -21,22 +23,21 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   const isEditing = Boolean(initialData);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
-      status: initialData?.status || "active",
     },
-    enableReinitialize: true,
     validationSchema: toFormikValidationSchema(projectValidationSchema),
     onSubmit: async (values, { resetForm }) => {
       try {
-        if (isEditing && initialData) {
+        if (isEditing && initialData?.id) {
           await projectService.editProject(initialData.id, values);
         } else {
           await projectService.createProject(values);
         }
-        resetForm();
         onSuccess();
+        resetForm();
         onClose();
       } catch (error) {
         console.error("Failed to save project:", error);
@@ -48,63 +49,39 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
+      <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
         <h2 className="text-xl font-bold mb-4">
-          {isEditing ? "Edit Project" : "Add New Project"}
+          {isEditing ? "Edit Project" : "Add Project"}
         </h2>
         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Title</label>
-            <input
-              type="text"
-              name="title"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="w-full border rounded-lg p-2"
-            />
-            {formik.touched.title && formik.errors.title && (
-              <p className="text-red-500 text-xs mt-1">
-                {String(formik.errors.title)}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="w-full border rounded-lg p-2"
-            />
-            {formik.touched.description && formik.errors.description && (
-              <p className="text-red-500 text-xs mt-1">
-                {String(formik.errors.description)}
-              </p>
-            )}
-          </div>
-
-          <div className="flex justify-end gap-3 mt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50"
-            >
+          <Input
+            label="Title"
+            name="title"
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.errors.title}
+            touched={formik.touched.title as boolean}
+          />
+          <Input
+            label="Description"
+            name="description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.errors.description}
+            touched={formik.touched.description as boolean}
+          />
+          <div className="flex justify-end gap-2 mt-4">
+            <Button type="button" onClick={onClose} variant="secondary">
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              {isEditing ? "Update Project" : "Save Project"}
-            </button>
+            </Button>
+            <Button type="submit">{isEditing ? "Update" : "Create"}</Button>
           </div>
         </form>
       </div>
     </div>
   );
 };
+
+export default ProjectModal;
