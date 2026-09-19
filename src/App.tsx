@@ -1,14 +1,32 @@
 import React from "react";
-import { useAuthInit } from "./hooks/useAuthInit";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { authLoader } from "./routes/authLoader";
+import { Dashboard } from "./pages/Dashboard";
+import { Login } from "./pages/Login";
+import { Signup } from "./pages/Signup";
+
+const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+    loader: authLoader,
+  },
+  {
+    path: "*",
+    element: <Login />,
+  },
+]);
 
 export const App: React.FC = () => {
-  useAuthInit();
-
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <h1>Project Management App</h1>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
