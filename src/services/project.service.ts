@@ -1,15 +1,23 @@
 import { appClient } from "./app.client";
-import { Project, CreateProjectRequest } from "../models/ProjectProps";
 
 export const projectService = {
-  getProjects: async (): Promise<Project[]> => {
-    return await appClient("/api/projects");
-  },
-
-  createProject: async (data: CreateProjectRequest): Promise<Project> => {
-    return await appClient("/api/projects", {
+  createProject: async (data: any) => {
+    return await appClient("/projects", {
       method: "POST",
       body: JSON.stringify(data),
+    });
+  },
+
+  editProject: async (id: string, data: any) => {
+    return await appClient(`/projects/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  },
+
+  deleteProject: async (id: string) => {
+    return await appClient(`/projects/${id}`, {
+      method: "DELETE",
     });
   },
 };
