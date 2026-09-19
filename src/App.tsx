@@ -4,6 +4,7 @@ import { authLoader } from "./routes/authLoader";
 import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
+import { ProjectDetails } from "./pages/ProjectDetails";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,11 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+    loader: authLoader,
+  },
+  {
+    path: "/dashboard/project/:id",
+    element: <ProjectDetails />,
     loader: authLoader,
   },
   {
