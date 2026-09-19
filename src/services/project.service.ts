@@ -1,6 +1,12 @@
 import { appClient } from "./app.client";
 
 export const projectService = {
+  getProjects: async () => {
+    return await appClient("/projects", {
+      method: "GET",
+    });
+  },
+
   createProject: async (data: any) => {
     return await appClient("/projects", {
       method: "POST",
