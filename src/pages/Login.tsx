@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { loginValidationSchema } from "../utils/validations";
 import { login } from "../services/auth.service";
 import { setCredentials } from "../store/slices/authSlice";
-import { Input } from "../components/Input";
+import { Input } from "../shared/ui/Input";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();

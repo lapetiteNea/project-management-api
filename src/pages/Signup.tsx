@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { signupValidationSchema } from "../utils/validations";
 import { register } from "../services/auth.service";
-import { Input } from "../components/Input";
+import { Input } from "../shared/ui/Input";
 
 export const Signup: React.FC = () => {
   const formik = useFormik({
