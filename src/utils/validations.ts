@@ -17,3 +17,8 @@ export const loginValidationSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
+
+export const projectValidationSchema = z.object({
+  title: z.string().min(3, "პროექტის სახელი უნდა იყოს მინიმუმ 3 სიმბოლო"),
+  description: z.string().optional(),
+});
